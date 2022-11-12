@@ -105,10 +105,15 @@ postsRouter.use((req, res, next) => {
 })
 
 postsRouter.get('/', async (req, res) => {
+    try {
         const posts = await getAllPosts();
-    res.send({
-        posts
-    })
+        res.send({
+            posts
+        })
+    } catch (error) {
+        console.log(error)
+    }
+    
    
 })
 

@@ -22,7 +22,7 @@ async function createUser({
 
     return user;
   } catch (error) {
-    throw error;
+    console.log(error)
   }
 }
 
