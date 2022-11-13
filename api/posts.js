@@ -4,7 +4,10 @@ const {getAllPosts, createPost, getPostById,} = require('../db/index')
 const { requireUser } = require('./utils')
 const { updatePost } = require('../db/index')
 
-
+postsRouter.use((req, res, next) => {
+    console.log('a request is being made to /posts')
+    next()
+})
 
 postsRouter.post('/', requireUser, async (req, res, next) => {
     const { title, content, tags = "" } = req.body;
@@ -32,21 +35,15 @@ postsRouter.post('/', requireUser, async (req, res, next) => {
         next({ name, message})
     }
 })
-postsRouter.get('/', async (req, res, next) => {
-    try {
-        const allPosts = await getAllPosts();
 
-        const posts = allPosts.filter(post => {
-            if(post.active) {
-                return true;
-            }
-            if(req.user && post.author.Id === req.user.id){
-                return true;
-            }
-            return false;
+postsRouter.get('/', async (req, res) => {
+    try {
+        const posts = await getAllPosts();
+        res.send({
+            posts
         })
-    } catch ({name, message}) {
-        next({name, message})
+    } catch (error) {
+        console.log(error)
     }
 })
 
